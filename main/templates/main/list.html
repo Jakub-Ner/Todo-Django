@@ -1,0 +1,33 @@
+{% extends 'main/base.html' %}
+{% block title %}
+TODO
+{% endblock %}
+
+{% block content %}
+
+{% for variable in dir %}
+    <p>{{ variable }}</p>
+{% endfor %}
+
+<h1> {{ todo.name }}</h1>
+<form method="POST">
+    <ul>
+        {% csrf_token %}
+        {{ form.as_p }}
+        {% for note in todo.item_set.all %}
+        <li>
+            <p>{{ note.text}}
+            {% if note.completed == True %}
+            <input type="checkbox" value="completed" name="c{{note.id}}" checked>
+            {% else %}
+            <input type="checkbox" value="completed" name="c{{note.id}}">
+            {% endif %}
+            </p>
+        </li>
+        {% endfor %}
+    </ul>
+    <button type="submit" name="save" value="save">Save</button>
+    <input type="text" name="new">
+    <button type="submit" name="newNote" value="newNote">Add Note</button>
+</form>
+{% endblock %}

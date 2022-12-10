@@ -1,0 +1,10 @@
+{% extends 'main/base.html' %}
+
+{% block title %} Home {% endblock %}
+
+{% block content %}
+    <p>Welcome to the Django Tutorial!</p>
+{% for todo in todos %}
+        <a href="/{{ todo.id }}">{{ todo }}</a> <br>
+{% endfor%}
+{% endblock %}
