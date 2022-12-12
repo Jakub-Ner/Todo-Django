@@ -1,3 +1,5 @@
+from time import sleep
+
 from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect
 
@@ -15,6 +17,7 @@ def index(response, id):
         if response.POST.get("save"):
             for note in todo.item_set.all():
                 if response.POST.get(f"c{note.id}") == "completed":
+                    note.closing_date = response.time
                     note.completed = True
                 else:
                     note.completed = False
@@ -23,13 +26,14 @@ def index(response, id):
         elif response.POST.get("newNote"):
             txt = response.POST.get("new")
             if len(txt) > 2:
-                todo.item_set.create(text=txt, completed=False)
+                todo.item_set.create(text=txt, completed=False, opening_date=response.time)
             else:
                 print("invalid")
     return render(response, "main/list.html", {"todo": todo})
 
 
 def home(response):
+    print(response.time)
     user = response.user
     if user.is_authenticated:
         return render(response, "main/home.html", {"todos": user.todo_list.all()})
@@ -49,3 +53,5 @@ def create(response):
     else:
         form = CreateNewList()
         return render(response, "main/create.html", {"form": form})
+
+
